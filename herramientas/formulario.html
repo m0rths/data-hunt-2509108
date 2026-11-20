@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Formulario de prueba</title>
+</head>
+<body>
+  <h1>Registro (prueba)</h1>
+  <!-- Al presionar "Enviar", el navegador manda los datos a listener.ps1 -->
+  <form method="post" action="http://localhost:5000/registro">
+    <!-- PASO: cambia estos campos por los de tu tabla en docs/campos.md -->
+    <p><label>Correo electrónico <input type="email" name="email" required></label></p>
+    <p><label>Contraseña <input type="password" name="password" required></label></p>
+    <p><label>Nombre completo <input type="text" name="nombre" required></label></p>
+    <p><label>Teléfono <input type="tel" name="telefono" required></label></p>
+    <p><button>Enviar</button></p>
+  </form>
+</body>
+</html>

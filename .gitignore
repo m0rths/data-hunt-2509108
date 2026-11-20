@@ -1,0 +1,12 @@
+# Datos de clientes y empleados: NUNCA se suben al repositorio
+datos/
+protegido/
+restaurado/
+
+# Llaves de cifrado
+*.key
+
+# Archivos del sistema y del editor
+Thumbs.db
+desktop.ini
+.vscode/
