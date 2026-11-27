@@ -1,6 +1,6 @@
 # =====================================================================
 # src\rutas\login.ps1 - Inicio de sesión y bitácora de accesos
-# VERSIÓN LÍNEA BASE: contiene fallas intencionales marcadas como HALLAZGO
+# FASE 7: contraseñas con hash y consola sin datos personales
 # =====================================================================
 
 function Formulario-Login([string]$mensaje = "") {
@@ -35,19 +35,22 @@ $Rutas["/login"] = {
 
     $form = Leer-Formulario $ctx
 
-    # HALLAZGO H-03: la contraseña aparece en la consola del servidor
-    Write-Host "[DEBUG] Inicio de sesión: email=$($form['email']) password=$($form['password'])" -ForegroundColor Yellow
+    # CORREGIDO H-03: la consola ya no muestra el correo ni la contraseña
+    Write-Host "  Intento de inicio de sesión"
 
-    # HALLAZGO H-01: compara contraseñas guardadas en texto plano
-    $usuario = Leer-Csv $ArchivoUsuarios | Where-Object { $_.email -eq $form["email"] -and $_.password -eq $form["password"] }
+    # CORREGIDO H-01: se compara contra el hash guardado
+    $usuario = Leer-Csv $ArchivoUsuarios | Where-Object { $_.email -eq $form["email"] } | Select-Object -First 1
+    $correcto = $false
+    if ($usuario) { $correcto = Probar-Contrasena $form["password"] $usuario.password_hash }
 
-    # Cada intento queda en la bitácora, exitoso o no
-    Registrar-Acceso $ctx $form["email"] "login" ([bool]$usuario)
+    # Cada intento queda en la bitácora, exitoso o no (nunca la contraseña)
+    Registrar-Acceso $ctx $form["email"] "login" $correcto
 
-    if ($usuario) {
+    if ($correcto) {
         Enviar $ctx (Nueva-Pagina "Bienvenido" "<p>Iniciaste sesión como $(Escapar $form['email']).</p>")
     }
     else {
+        # El mensaje no dice si falló el correo o la contraseña
         Enviar $ctx (Nueva-Pagina "Iniciar sesión" (Formulario-Login "Correo o contraseña incorrectos."))
     }
 }

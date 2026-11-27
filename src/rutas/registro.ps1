@@ -1,6 +1,6 @@
 # =====================================================================
 # src\rutas\registro.ps1 - Alta de clientes
-# FASE 6: aviso de privacidad, consentimiento y minimización
+# FASE 7: contraseñas con hash y consola sin datos personales
 # =====================================================================
 
 function Formulario-Registro([string]$mensaje = "") {
@@ -41,9 +41,8 @@ $Rutas["/registro"] = {
 
     $form = Leer-Formulario $ctx
 
-    # HALLAZGO H-03: los datos del cliente se imprimen en la consola del servidor
-    $texto = ($form.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join " | "
-    Write-Host "[DEBUG] Registro recibido: $texto" -ForegroundColor Yellow
+    # CORREGIDO H-03: la consola solo muestra el evento, nunca los datos del cliente
+    Write-Host "  Solicitud de registro recibida"
 
     # El servidor valida de nuevo: el navegador se puede saltar los "required"
     if (-not $form["email"] -or -not $form["password"]) {
@@ -66,8 +65,8 @@ $Rutas["/registro"] = {
 
     $registro = [ordered]@{}
     $registro["email"] = $form["email"]
-    # HALLAZGO H-01: la contraseña se guarda en texto plano
-    $registro["password"] = $form["password"]
+    # CORREGIDO H-01: se guarda un hash con sal, nunca la contraseña
+    $registro["password_hash"] = Nuevo-HashContrasena $form["password"]
     foreach ($campo in $Campos) {
         $registro[$campo.Nombre] = $form[$campo.Nombre]
     }
