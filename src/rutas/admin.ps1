@@ -14,3 +14,4 @@ $Rutas["/admin"] = {
     $contenido  = "<h2>Clientes ($($usuarios.Count))</h2>" + (Tabla-Html $usuarios)
     $contenido += "<h2>Bitácora de accesos</h2>" + (Tabla-Html $accesos)
     Enviar $ctx (Nueva-Pagina "Administración" $contenido)
+}

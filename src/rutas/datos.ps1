@@ -21,5 +21,5 @@ function Leer-Csv([string]$ruta) {
 
 # Agrega un registro al final de un CSV (lo crea si no existe)
 function Agregar-Csv([string]$ruta, $registro) {
-    [PSCustomObject]$registro | Export-Csv -Path $ruta -Append -NoTypeInformation -Encoding UTF8
+    [PSCustomObject]$registro | Export-Csv -Path $ruta -Append -Encoding UTF8
 }
