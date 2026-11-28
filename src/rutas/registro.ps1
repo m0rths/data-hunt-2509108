@@ -81,7 +81,7 @@ $Rutas["/registro"] = {
     # CORREGIDO H-05: ya no se guardan IP, navegador ni idioma en users.csv (minimización).
     # La IP y el navegador solo quedan en la bitácora de accesos, y el aviso lo declara.
 
-    # HALLAZGO H-06: el archivo users.csv se guarda sin cifrar
+     # RIESGO H-06 (ver docs/hallazgos.md): users.csv de trabajo sin cifrar; sus copias se cifran con protect.ps1
     Agregar-Csv $ArchivoUsuarios $registro
 
     Enviar $ctx (Nueva-Pagina "Cuenta creada" "<p>Tu cuenta se creó correctamente. Ya puedes <a href='/login'>iniciar sesión</a>.</p>")
